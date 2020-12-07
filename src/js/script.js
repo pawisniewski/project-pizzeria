@@ -166,6 +166,7 @@
       thisProduct.cartButton.addEventListener('click', function(event){
         event.preventDefault();
         thisProduct.processOrder();
+        thisProduct.addToCart();
       });
     }
     processOrder(){
@@ -230,8 +231,11 @@
           }
         }
       }
+      thisProduct.priceSingle = price;
+
       /* multiply price by amount */
       price *= thisProduct.amountWidget.value;
+      thisProduct.priceSummary = price;
 
       /* update calculated price in the HTML */
       thisProduct.priceElem.innerHTML = price;
@@ -242,6 +246,59 @@
       thisProduct.amountWidgetElem.addEventListener('updated', function(){
         thisProduct.processOrder();
       });
+    }
+    addToCart(){
+      const thisProduct = this;
+
+      app.cart.add(thisProduct.prepareCartProduct());
+    }
+    prepareCartProduct(){
+      const thisProduct = this;
+
+      const productSummary = {
+        id: thisProduct.id,
+        name: thisProduct.data.name,
+        amount: thisProduct.amountWidget.value,
+        priceSingle: thisProduct.priceSingle,
+        priceSummary: thisProduct.priceSummary,
+        params: thisProduct.prepareCartProductParams(),
+      };
+      return productSummary;
+    }
+    prepareCartProductParams(){
+      const thisProduct = this;
+
+      /* covert form to object structure e.g. { sauce: ['tomato'], toppings: ['olives', 'redPeppers']} */
+      const formData = utils.serializeFormToObject(thisProduct.form);
+      const params = {};
+
+      /* for every category (param)... */
+      for(let paramId in thisProduct.data.params){
+
+        /* determine param value, e.g. paramId = 'toppings', param = { label: 'Toppings', type: 'checkboxes'... } */
+        const param = thisProduct.data.params[paramId];
+
+        /* create category param in params const eg. params = { ingredients: { name: 'Ingredients', options: {}}} */
+        params[paramId] = {
+          name: param.label,
+          options: {}
+        };
+        /* for every option in this category */
+        for(let optionId in param.options){
+
+          /* determine option value, e.g. optionId = 'olives', option = { label: 'Olives', price: 2, default: true } */
+          const option = param.options[optionId];
+
+          /* check if there is param with a name of paramId in formData and if it includes optionId */
+          const optionSelected = formData[paramId] && formData[paramId].includes(optionId);
+
+          /* check if the option is selected */
+          if(optionSelected){
+            params[paramId].options[optionId] = option.label;
+          }
+        }
+      }
+      return params;
     }
   }
 
@@ -298,7 +355,7 @@
       thisWidget.element.dispatchEvent(event);
     }
   }
-  // eslint-disable-next-line no-unused-vars
+
   class Cart{
     constructor(element){
       const thisCart = this;
@@ -306,7 +363,7 @@
       thisCart.products = [];
       thisCart.getElements(element);
       thisCart.initActions();
-      console.log('new Cart', thisCart);
+      //console.log('new Cart', thisCart);
     }
     getElements(element){
       const thisCart = this;
@@ -319,6 +376,11 @@
       thisCart.dom.toggleTrigger.addEventListener('click', function(){
         thisCart.dom.wrapper.classList.toggle(classNames.cart.wrapperActive);
       });
+    }
+    add(menuProduct){
+      //const thisCart = this;
+
+      console.log('adding product', menuProduct);
     }
   }
 
@@ -342,11 +404,11 @@
     },
     init: function(){
       const thisApp = this;
-      console.log('*** App starting ***');
-      console.log('thisApp:', thisApp);
-      console.log('classNames:', classNames);
-      console.log('settings:', settings);
-      console.log('templates:', templates);
+      //console.log('*** App starting ***');
+      //console.log('thisApp:', thisApp);
+      //console.log('classNames:', classNames);
+      //console.log('settings:', settings);
+      //console.log('templates:', templates);
 
       thisApp.initData();
       thisApp.initMenu();
