@@ -260,7 +260,7 @@
         name: thisProduct.data.name,
         amount: thisProduct.amountWidget.value,
         priceSingle: thisProduct.priceSingle,
-        priceSummary: thisProduct.priceSummary,
+        price: thisProduct.priceSummary,
         params: thisProduct.prepareCartProductParams(),
       };
       return productSummary;
@@ -280,7 +280,7 @@
 
         /* create category param in params const eg. params = { ingredients: { name: 'Ingredients', options: {}}} */
         params[paramId] = {
-          name: param.label,
+          label: param.label,
           options: {}
         };
         /* for every option in this category */
@@ -370,6 +370,7 @@
       thisCart.dom = {};
       thisCart.dom.wrapper = element;
       thisCart.dom.toggleTrigger = thisCart.dom.wrapper.querySelector(select.cart.toggleTrigger);
+      thisCart.dom.productList = thisCart.dom.wrapper.querySelector(select.cart.productList);
     }
     initActions(){
       const thisCart = this;
@@ -378,8 +379,10 @@
       });
     }
     add(menuProduct){
-      //const thisCart = this;
-
+      const thisCart = this;
+      const generatedHTML = templates.cartProduct(menuProduct);
+      const generatedDOM = utils.createDOMFromHTML(generatedHTML);
+      thisCart.dom.productList.appendChild(generatedDOM);
       console.log('adding product', menuProduct);
     }
   }
