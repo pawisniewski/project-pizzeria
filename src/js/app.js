@@ -109,7 +109,7 @@ const app = {
     const thisApp = this;
     thisApp.bookingTab = document.querySelector(select.containerOf.booking);
     thisApp.booking = new Booking(thisApp.bookingTab);
-    console.log(thisApp.bookingTab);
+    //console.log(thisApp.bookingTab);
   },
 
   init: function(){
@@ -126,7 +126,7 @@ const app = {
     thisApp.initCart();
     thisApp.initBooking();
   },
-};
 
+};
 app.init();
 
