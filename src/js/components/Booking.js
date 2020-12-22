@@ -173,7 +173,7 @@ class Booking{
         thisBooking.clearSelected();
 
         clickedElement.classList.add(classNames.booking.tableSelected);
-        thisBooking.selectedTable = tableNumber;
+        thisBooking.selectedTable = parseInt(tableNumber);
         console.log('selectedTable', thisBooking.selectedTable);
       }
       else if(!clickedElement.classList.contains(classNames.booking.tableBooked)
@@ -199,6 +199,36 @@ class Booking{
     console.log('clearSelected');
   }
 
+  sendBooking(){
+    const thisBooking = this;
+
+    const url = settings.db.url + '/' + settings.db.booking;
+    const payload = {
+      date: thisBooking.datePicker.value,
+      hour: thisBooking.hourPicker.value,
+      table: thisBooking.selectedTable,
+      duration: thisBooking.hoursAmount.value,
+      ppl: thisBooking.peopleAmount.value,
+      phone: thisBooking.dom.phone.value,
+      address: thisBooking.dom.address.value,
+      starters: [],
+    };
+    console.log('payload', payload);
+
+    for(let starter of thisBooking.starters) {
+      payload.starters.push(starter);
+    }
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    };
+    fetch(url, options);
+    location.reload();
+  }
+
   render(bookingTab){
     const thisBooking = this;
 
@@ -206,6 +236,7 @@ class Booking{
     thisBooking.dom = {};
     thisBooking.dom.wrapper = bookingTab;
     bookingTab.innerHTML = generatedHTML;
+    thisBooking.starters = [];
 
     thisBooking.dom.peopleAmount = bookingTab.querySelector(select.booking.peopleAmount);
     thisBooking.dom.hoursAmount = bookingTab.querySelector(select.booking.hoursAmount);
@@ -215,6 +246,12 @@ class Booking{
 
     thisBooking.dom.tables = bookingTab.querySelectorAll(select.booking.tables);
     thisBooking.dom.tablesPlan = bookingTab.querySelector(select.booking.tablesPlan);
+
+    thisBooking.dom.phone = bookingTab.querySelector(select.booking.phone);
+    thisBooking.dom.address = bookingTab.querySelector(select.booking.address);
+    thisBooking.dom.starters = bookingTab.querySelector(select.booking.starters);
+
+    thisBooking.dom.bookTable = bookingTab.querySelector(select.booking.bookTable);
   }
 
   initWidgets(){
@@ -235,6 +272,20 @@ class Booking{
       event.preventDefault();
       thisBooking.changeEvent = event;
       thisBooking.selectTable(event);
+    });
+
+    thisBooking.dom.bookTable.addEventListener('click', function(event){
+      event.preventDefault();
+      thisBooking.sendBooking();
+    });
+
+    thisBooking.dom.starters.addEventListener('click', function(event){
+      const clickedElement = event.target;
+      if(clickedElement.tagName === 'INPUT' && clickedElement.type === 'checkbox' && clickedElement.name === 'starter' ){
+        if(clickedElement.checked){
+          thisBooking.starters.push(clickedElement.value);
+        }
+      }
     });
   }
 

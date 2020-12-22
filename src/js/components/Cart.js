@@ -100,6 +100,7 @@ class Cart{
 
   sendOrder(){
     const thisCart = this;
+
     const url = settings.db.url + '/' + settings.db.order;
     const payload = {
       address: thisCart.dom.formAddress.value,
@@ -111,6 +112,7 @@ class Cart{
       products: [],
     };
     console.log('payload', payload);
+
     for(let prod of thisCart.products) {
       payload.products.push(prod.getData());
     }
@@ -122,6 +124,7 @@ class Cart{
       body: JSON.stringify(payload),
     };
     fetch(url, options);
+    location.reload();
   }
 
 }
