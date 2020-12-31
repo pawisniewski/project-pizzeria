@@ -1,0 +1,159 @@
+/* Global */
+
+.home-wrapper {
+  margin: 42px auto;
+  padding: 72px 48px;
+  background: #fff;
+  border-bottom: 1px solid #e6e6e6;
+  border-radius: 4px;
+}
+
+/* Banner */
+
+.link-wrapper {
+  &:hover .link-title {
+    transform: translateY(-24px);
+    opacity: 1;
+  }
+
+  &:hover .link-subtitle {
+    transform: translateY(-24px);
+    opacity: 1;
+  }
+}
+
+.hours-wrapper {
+  background-color: $color-main;
+  border: 2px solid  white;
+  text-align: center;
+  padding: 24px 0 12px 0;
+  border-radius: 5px;
+}
+
+.order {
+  background-image: url("../images/assets/pizza-1.jpg");
+  border: 2px solid  white;
+  text-align: center;
+  padding-top: 36px;
+  border-radius: 5px;
+}
+
+.booking {
+  background-image: url("../images/assets/pizza-2.jpg");
+  border: 2px solid  white;
+  text-align: center;
+  padding-top: 36px;
+  border-radius: 5px;
+}
+
+.link-title {
+  color: $color-light;
+  transition: $transition;
+
+}
+
+.link-subtitle {
+  color: $color-light;
+  transition: $transition;
+  opacity: 0;
+
+}
+
+.link-title-hours {
+  color: $color-light;
+
+}
+
+.subtitle-hours {
+  color: $color-light;
+
+}
+
+/* Carousel */
+
+.carousel-inner {
+  margin: 96px 0;
+  padding: 0;
+}
+
+.card-horizontal {
+  display: flex;
+  flex-wrap: wrap;
+
+}
+
+.card-img {
+  width: 100%;
+  height: 240px;
+  object-fit: cover;
+  border-radius: 5px;
+  padding: 2px;
+}
+
+.carousel-indicators li {
+  width: 10px;
+  height: 10px;
+  border-radius: 100%;
+  background-color: #999 !important;
+  background-color: rgba(70,70,70,.25) !important;
+}
+
+.carousel-indicators {
+  bottom: 48px;
+}
+
+/* Gallery */
+
+.gallery-item {
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &:hover {
+    img {
+      opacity: 0.8;
+      transition: $transition;
+    }
+
+    i{
+      opacity: 1;
+      transition: $transition;
+    }
+  }
+
+  img {
+    position: relative;
+    width: 100%;
+    height: 240px;
+    object-fit: cover;
+    border-radius: 5px;
+    padding: 2px;
+  }
+}
+
+.icon-wrapper {
+  position: absolute;
+
+  i{
+    opacity: 0;
+    font-size: 24px;
+    color: $color-light;
+
+    &:hover {
+      color: $color-main;
+      transition: $transition;
+    }
+  }
+}
+
+/* Footer */
+
+.home-page-footer {
+  margin-top: 24px;
+  padding: 2px;
+}
+
+.footer-link {
+  color: $color-main;
+}

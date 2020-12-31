@@ -2,6 +2,7 @@ import {select, classNames, settings} from './settings.js';
 import Product from './components/Product.js';
 import Cart from './components/Cart.js';
 import Booking from './components/Booking.js';
+import Home from './components/Home.js';
 
 const app = {
   initPages: function(){
@@ -9,6 +10,7 @@ const app = {
 
     thisApp.pages = document.querySelector(select.containerOf.pages).children;
     thisApp.navLinks = document.querySelectorAll(select.nav.links);
+    thisApp.homeLinks = document.querySelectorAll(select.home.links);
 
     const idFromHash = window.location.hash.replace('#/', '');
     let pageMatchingHash = thisApp.pages[0].id;
@@ -27,6 +29,21 @@ const app = {
     for(let link of thisApp.navLinks){
       link.addEventListener('click', function(event){
         const clickedElement = this;
+        event.preventDefault();
+
+        /* get page id from href attribute */
+        const id = clickedElement.getAttribute('href').replace('#', '');
+
+        /* run thisApp.activatePage with that id */
+        thisApp.activatePage(id);
+
+        /* change URL hash */
+        window.location.hash = '#/' + id;
+      });
+    }
+    for (let link of thisApp.homeLinks){
+      link.addEventListener('click', function(event){
+        const clickedElement=this;
         event.preventDefault();
 
         /* get page id from href attribute */
@@ -112,6 +129,12 @@ const app = {
     //console.log(thisApp.bookingTab);
   },
 
+  initHome: function(){
+    const thisApp = this;
+    thisApp.homeWrapper = document.querySelector(select.containerOf.home);
+    thisApp.home = new Home(thisApp.homeWrapper);
+  },
+
   init: function(){
     const thisApp = this;
     //console.log('*** App starting ***');
@@ -119,7 +142,7 @@ const app = {
     //console.log('classNames:', classNames);
     //console.log('settings:', settings);
     //console.log('templates:', templates);
-
+    thisApp.initHome();
     thisApp.initPages();
     thisApp.initData();
     //thisApp.initMenu();
